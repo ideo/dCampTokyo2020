@@ -83,8 +83,13 @@
 
     function runDetection() {
         model.detect(video).then(predictions => {
-            var reponse = JSON.parse(predictions);
-            console.log("Predictions: ", response[0].bbox[0], " ", response[0].bbox[1]);
+            try{
+              var reponse = JSON.parse(predictions);
+              console.log("Predictions: ", response[0].bbox[0], " ", response[0].bbox[1]);
+            }
+            catch(error) {
+              console.error(error);
+            }
             model.renderPredictions(predictions, canvas, context, video);
             if (isVideo) {
                 requestAnimationFrame(runDetection);
