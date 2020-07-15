@@ -1,0 +1,27 @@
+/**************
+General
+**************/
+html,body{
+  font-family: Noto Sans JP;
+  letter-spacing: 0.1em;
+  color: #000000;
+  background-color: #ff8e00ff;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+#moodChecker{
+  width: 50%;
+}
+
+#highFive{
+  width:50%;
+  float:right; 
+}
+
+#toggleButton{
+  text-align: center;
+  padding: 1.5rem 0;
+  width: 40%;
+  background-color: #ffffff;
+}
