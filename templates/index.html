@@ -86,8 +86,8 @@
       handPos[index][1] = obj.content.y
       handCtx.beginPath();
       handCtx.arc(handPos[index][0], handPos[index][1], 20, 0, 2 * Math.PI);
-      context.fillStyle = color[index];
-      context.fill();
+      handCtx.fillStyle = color[index];
+      handCtx.fill();
     })
 
   </script>
