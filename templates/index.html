@@ -14,16 +14,19 @@
     <div id="contents">
       <div id="moodChecker">
         <h2 class="subtitle">Mood Checker</h2>
-        <div id="chat"></div>
-        <input type="text" id="chat-input"> <button onclick="sendMessage()">Send</button>
+        <div class="slidecontainer">
+          <p id="emoji">&#128518;</p>
+          <input type="range" min="1" max="100" value="50" id="slider">
+          <p id="sliderValue"></p>
+        </div>
       </div>
       <div id="highFive">
         <h2 class="subtitle">Remote High Five</h2>
+        <video id="video"></video>
+        <canvas id="canvas" class="border" width="640" height="480"></canvas>
         <button onclick="toggleVideo()" id="toggleButton" type="button">
           Toggle Video
         </button>
-        <video id="video"></video>
-        <canvas id="canvas" class="border" width="640" height="480"></canvas>
       </div>
     </div>
     <div id="bottomMargin"></div>
@@ -37,14 +40,21 @@
     **************/
 
     var socket = io()
+    var slider = document.getElementById('slider');
+    var sliderValue = document.getElementById('sliderValue');
 
-    function sendMessage() {
-        console.log(document.getElementById("chat-input").value)
-        socket.emit('message',document.getElementById("chat-input").value)
-    }
-    socket.on("new_message", (data) => {
-      document.getElementById("chat").innerHTML += "<br>" + data
-    })
+    slider.addEventListener('input', function () {
+      sliderValue.innerHTML = slider.value;
+      socket.emit('message',slider.value)
+    }, false);
+
+    // function sendMessage() {
+    //     console.log(document.getElementById("chat-input").value)
+    //     socket.emit('message',document.getElementById("chat-input").value)
+    // }
+    // socket.on("new_message", (data) => {
+    //   document.getElementById("chat").innerHTML += "<br>" + data
+    // })
 
     /**************
     HandTrack.js

@@ -17,13 +17,57 @@ html,body{
 }
 
 #contents{
-  padding: 5rem;
+  padding: 2rem;
 }
 
 #moodChecker{
   text-align: center;
   width: 50%;
   float:left;
+}
+
+.slidecontainer {
+  width: 80%;
+  margin: 4rem auto;
+}
+
+#emoji{
+  font-size: 20rem;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+#slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 50px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+#slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+#slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 50px; /* Set a specific slider handle width */
+  height: 50px; /* Slider handle height */
+  background: #ff8e00ff; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+#slider::-moz-range-thumb {
+  width: 50px; /* Set a specific slider handle width */
+  height: 50px; /* Slider handle height */
+  background: #ff8e00ff; /* Green background */
+  cursor: pointer; /* Cursor on hover */
 }
 
 #highFive{
