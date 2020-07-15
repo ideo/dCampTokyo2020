@@ -14,6 +14,7 @@
     <div id="contents">
       <div id="moodChecker">
         <p id="mood1"></p>
+        <canvas id="barChart"></canvas>
       </div>
       <div id="highFive">
         <p id="handPosition1"></p>
@@ -23,6 +24,9 @@
   </body>
   <!-- Load the handtrackjs model. -->
   <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <!--Socket IO.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
   <script>
     /**************
@@ -30,9 +34,32 @@
     **************/
 
     var socket = io()
+    var ctx = document.getElementById('barChart').getContext('2d')
+
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            datasets: [{
+                label: 'Mood Checker',
+                backgroundColor: 'rgb(255, 255, 255)',
+                borderColor: 'rgb(255, 142, 0)',
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            }]
+        },
+
+        // Configuration options go here
+        options: {}
+    });
+
     socket.on("new_mood", (data) => {
-      document.getElementById("mood1").innerHTML = data
+      var obj = JSON.parse(data)
+      document.getElementById("mood1").innerHTML = obj
     })
+
     socket.on("new_handPosition", (data) => {
       document.getElementById("handPosition1").innerHTML = data
     })

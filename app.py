@@ -5,13 +5,26 @@ import json
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+clients = []
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
+@socketio.on('connect')
+def registerClient():
+    print('Client connected: ' + request.sid)
+    clients.append(request.sid)
+
+@socketio.on('disconnect')
+def deleteClienet():
+    print('Client disconnected: ' + request.sid)
+    clients.remove(request.sid)
+
 @socketio.on("mood")
 def handleMessage(data):
     message = {
+        "clients":clients,
         "from":request.sid,
         "content":data
     }
@@ -20,6 +33,7 @@ def handleMessage(data):
 @socketio.on("handPosition")
 def handleMessage(data):
     message = {
+        "clients":clients,
         "from":request.sid,
         "content":data
     }
