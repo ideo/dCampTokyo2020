@@ -2,7 +2,7 @@ from flask import Flask, render_template, make_response, redirect
 from flask_socketio import SocketIO, send, emit
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 @app.route('/')
 def index():

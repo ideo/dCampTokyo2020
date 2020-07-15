@@ -1,29 +1,41 @@
-<!DOCTYPE html>
 <html>
-    <head>
-        <title>Socket IO demo</title>
-    </head>
-    <body>
-        <style>
-          body {background-color: yellow;}
-        </style>
-        <script>
-            var ws = new WebSocket("ws://127.0.0.1:5004/"),
-                // messages = document.createElement('ul');
-                background = document.getElementsByTagName('body')[0];
-            ws.onopen = function(event) {
-              console.log("WS Connection established");
-            };
-            ws.onmessage = function (event) {
-                background.style.backgroundColor = 'blue';
-                console.log(document.createTextNode(event.data));
-                // var messages = document.getElementsByTagName('ul')[0],
-                //     message = document.createElement('li'),
-                //     content = document.createTextNode(event.data);
-                // message.appendChild(content);
-                // messages.appendChild(message);
-            };
-            //document.body.appendChild(messages);
-        </script>
-    </body>
+<head>
+  <title>SocketIO</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<style>
+  body {
+    background-color: yellow;
+  }
+  #textWrapper{
+    margin-top: 20%;
+    text-align: center;
+  }
+  #text{
+    font-family: Helvetica, sans-serif;
+    font-size: 200px;
+    color: white;
+  }
+</style>
+<script>
+$(function() {
+    var socket = io('https://dcamptokyo2020.herokuapp.com/');
+    socket.on('connect', function(){
+      console.log("connected to Socket IO!");  
+    });
+    socket.on('new_message', function (data) {
+      background = document.getElementsByTagName('body')[0];
+      text = document.getElementById('text');
+      // var reponse = JSON.parse(data);
+      // console.log(reponse.value);
+      console.log(data);
+    });
+});
+</script>
+<div id='textWrapper'>
+  <h2 id='text'>Hello</h2>
+</div>
+</body>
 </html>
