@@ -13,11 +13,10 @@
     </div>
     <div id="contents">
       <div id="moodChecker">
-        <p id="mood1"></p>
         <canvas id="barChart"></canvas>
       </div>
       <div id="highFive">
-        <p id="handPosition1"></p>
+        <canvas id="handPositions" width="640" height="480"></canvas>
       </div>
     </div>
     <div id="bottomMargin"></div>
@@ -35,6 +34,13 @@
 
     var socket = io()
     var ctx = document.getElementById('barChart').getContext('2d')
+
+    var handCtx = document.getElementById('handPositions').getContext("2d")
+    var handPos = [
+      [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0],
+      [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]
+    ];
+    var color = ['red', 'blue', 'green', 'yellow', 'orange', 'pink', 'purple', 'grey', 'black', 'brown', 'cyan', 'Lavender']
 
     var chart = new Chart(ctx, {
         // The type of chart we want to create
@@ -74,7 +80,14 @@
     })
 
     socket.on("new_handPosition", (data) => {
-      document.getElementById("handPosition1").innerHTML = data
+      var obj = JSON.parse(data)
+      var index = obj.clients.indexOf(obj.from)
+      handPos[index][0] = obj.content.x
+      handPos[index][1] = obj.content.y
+      handCtx.beginPath();
+      handCtx.arc(handPos[index][0], handPos[index][1], 20, 0, 2 * Math.PI);
+      context.fillStyle = color[index];
+      context.fill();
     })
 
   </script>

@@ -104,8 +104,9 @@
     function runDetection() {
         model.detect(video).then(predictions => {
             try{
-              console.log("Predictions: ", predictions[0].bbox[0], " ", predictions[0].bbox[1]);
-              socket.emit('handPosition', (predictions[0].bbox[0], predictions[0].bbox[1]));
+              var handPos = {x:predictions[0].bbox[0], y:predictions[0].bbox[1]};
+              console.log("Predictions: ", handPos.x, " ", handPos.y);
+              socket.emit('handPosition', handPos);
             }
             catch(error) {
               console.error(error);
