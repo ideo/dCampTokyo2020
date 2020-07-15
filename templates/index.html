@@ -84,8 +84,7 @@
     function runDetection() {
         model.detect(video).then(predictions => {
             try{
-              var reponse = JSON.parse(predictions);
-              console.log("Predictions: ", response[0].bbox[0], " ", response[0].bbox[1]);
+              console.log("Predictions: ", predictions[0].bbox[0], " ", predictions[0].bbox[1]);
             }
             catch(error) {
               console.error(error);
