@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,700;0,800;1,300;1,400;1,500;1,700;1,800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />
+  </head>
+  <body>
+    <div id="title">
+      <h1>d.camp 2020 Dashboard</h1>
+    </div>
+    <div id="contents">
+      <div id="moodChecker">
+        <h2 class="subtitle">Mood Checker</h2>
+        <div class="slidecontainer">
+          <p id="emoji">&#128518;</p>
+          <input type="range" min="1" max="100" value="50" id="slider">
+          <p id="sliderValue"></p>
+        </div>
+      </div>
+      <div id="highFive">
+        <h2 class="subtitle">Remote High Five</h2>
+        <video id="video"></video>
+        <canvas id="canvas" class="border" width="640" height="480"></canvas>
+        <button onclick="toggleVideo()" id="toggleButton" type="button">
+          Toggle Video
+        </button>
+      </div>
+    </div>
+    <div id="bottomMargin"></div>
+  </body>
+  <!-- Load the handtrackjs model. -->
+  <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script>
+    /**************
+    Send Socket IO
+    **************/
+
+    var socket = io()
+    var slider = document.getElementById('slider');
+    var sliderValue = document.getElementById('sliderValue');
+
+    slider.addEventListener('input', function () {
+      sliderValue.innerHTML = slider.value;
+      socket.emit('message',slider.value)
+    }, false);
+
+    // function sendMessage() {
+    //     console.log(document.getElementById("chat-input").value)
+    //     socket.emit('message',document.getElementById("chat-input").value)
+    // }
+    // socket.on("new_message", (data) => {
+    //   document.getElementById("chat").innerHTML += "<br>" + data
+    // })
+
+    /**************
+    HandTrack.js
+    **************/
+    var isVideo = false;
+    var model = null;
+    const modelParams = {
+        flipHorizontal: false,   // flip e.g for video
+        maxNumBoxes: 10,        // maximum number of boxes to detect
+        iouThreshold: 0.5,      // ioU threshold for non-max suppression
+        scoreThreshold: 0.6,    // confidence threshold for predictions.
+    }
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    var toggleButton = document.getElementById("toggleButton");
+
+    function toggleVideo() {
+        if (!isVideo) {
+            startVideo();
+        } else {
+            handTrack.stopVideo(video)
+            isVideo = false;
+        }
+    }
+
+    function startVideo() {
+        handTrack.startVideo(video).then(function (status) {
+            console.log("video started", status);
+            if (status) {
+                isVideo = true
+                runDetection()
+            }
+        });
+    }
+
+    function runDetection() {
+        model.detect(video).then(predictions => {
+            try{
+              console.log("Predictions: ", predictions[0].bbox[0], " ", predictions[0].bbox[1]);
+            }
+            catch(error) {
+              console.error(error);
+            }
+            model.renderPredictions(predictions, canvas, context, video);
+            if (isVideo) {
+                requestAnimationFrame(runDetection);
+            }
+        });
+    }
+
+    // Load the model.
+    handTrack.load(modelParams).then(lmodel => {
+        // detect objects in the image.
+        model = lmodel
+        toggleButton.disabled = false
+    });
+
+
+  </script>
+</html>
