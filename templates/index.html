@@ -1,1 +1,21 @@
-<h1>Hello World!</h1>
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div id="chat"></div>
+    <input type="text" id="chat-input"> <button onclick="sendMessage()">Send</button>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script>
+    var socket = io()
+    function sendMessage() {
+        console.log(document.getElementById("chat-input").value)
+        socket.emit('message',document.getElementById("chat-input").value)
+    }
+    socket.on("new_message", (data) => {
+      document.getElementById("chat").innerHTML += "<br>" + data
+    })
+  </script>
+</html>

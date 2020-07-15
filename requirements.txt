@@ -1,2 +1,5 @@
 gunicorn
 Flask
+Flask-SocketIO
+eventlet
+gevent-websocket

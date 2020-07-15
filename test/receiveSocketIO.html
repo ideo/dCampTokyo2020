@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Socket IO demo</title>
+    </head>
+    <body>
+        <style>
+          body {background-color: yellow;}
+        </style>
+        <script>
+            var ws = new WebSocket("ws://127.0.0.1:5004/"),
+                // messages = document.createElement('ul');
+                background = document.getElementsByTagName('body')[0];
+            ws.onopen = function(event) {
+              console.log("WS Connection established");
+            };
+            ws.onmessage = function (event) {
+                background.style.backgroundColor = 'blue';
+                console.log(document.createTextNode(event.data));
+                // var messages = document.getElementsByTagName('ul')[0],
+                //     message = document.createElement('li'),
+                //     content = document.createTextNode(event.data);
+                // message.appendChild(content);
+                // messages.appendChild(message);
+            };
+            //document.body.appendChild(messages);
+        </script>
+    </body>
+</html>
