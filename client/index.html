@@ -46,10 +46,16 @@
 
     var slider = document.getElementById('slider');
     var sliderValue = document.getElementById('sliderValue');
+    var emoji = document.getElementById('emoji');
 
     slider.addEventListener('input', function () {
-      sliderValue.innerHTML = slider.value;
+      sliderValue.innerHTML = slider.value
       socket.emit('mood',slider.value)
+      if(slider.value < 20) emoji.innerHTML = "&#128565;"
+      else if(slider.value >= 20 && slider.value < 40) emoji.innerHTML = "&#128547;"
+      else if(slider.value >= 40 && slider.value < 60) emoji.innerHTML = "&#128528;"
+      else if(slider.value >= 60 && slider.value < 80) emoji.innerHTML = "&#128513;"
+      else if(slider.value >= 80 && slider.value <= 100) emoji.innerHTML = "&#128514;"
     }, false);
 
     // function sendMessage() {

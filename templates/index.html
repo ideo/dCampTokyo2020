@@ -52,7 +52,17 @@
         },
 
         // Configuration options go here
-        options: {}
+        options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      max: 100,
+                      min: 0,
+                      stepSize: 10
+                  }
+              }]
+          }
+        }
     });
 
     socket.on("new_mood", (data) => {
