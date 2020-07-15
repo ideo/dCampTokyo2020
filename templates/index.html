@@ -59,6 +59,7 @@
       var obj = JSON.parse(data)
       var index = obj.clients.indexOf(obj.from)
       chart.data.datasets[0].data[index] = obj.content
+      chart.update()
       console.log(obj)
     })
 
