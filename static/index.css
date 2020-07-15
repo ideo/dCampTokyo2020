@@ -16,7 +16,7 @@ html,body{
 
 #highFive{
   width:50%;
-  float:right; 
+  float:right;
 }
 
 #toggleButton{
@@ -24,4 +24,12 @@ html,body{
   padding: 1.5rem 0;
   width: 40%;
   background-color: #ffffff;
+}
+
+#video{
+  display: none;
+}
+
+#canvas{
+  background-color: black;
 }
