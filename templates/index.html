@@ -57,7 +57,8 @@
 
     socket.on("new_mood", (data) => {
       var obj = JSON.parse(data)
-      document.getElementById("mood1").innerHTML = obj
+      document.getElementById("mood1").innerHTML = obj.from
+      console.log(obj)
     })
 
     socket.on("new_handPosition", (data) => {
