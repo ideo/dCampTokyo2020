@@ -93,7 +93,7 @@
       for(var i=0; i<handPos.length; i++){
         handCtx.beginPath();
         handCtx.arc(handPos[i][0], handPos[i][1], 10, 0, 2 * Math.PI);
-        handCtx.fillStyle = color[index];
+        handCtx.fillStyle = color[i];
         handCtx.fill();
       }
     })
