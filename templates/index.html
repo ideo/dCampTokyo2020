@@ -3,23 +3,30 @@
   <head>
     <meta charset="UTF-8">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:300,400,700&display=swap&subset=japanese" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,700;0,800;1,300;1,400;1,500;1,700;1,800&display=swap" rel="stylesheet">
     <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />
   </head>
   <body>
-    <div id="moodChecker">
-      <div id="chat"></div>
-      <input type="text" id="chat-input"> <button onclick="sendMessage()">Send</button>
+    <div id="title">
+      <h1>d.camp 2020 Dashboard</h1>
     </div>
-
-    <div id="highFive">
-      <button onclick="toggleVideo()" id="toggleButton" type="button">
-        Toggle Video
-      </button>
-      <video id="video"></video>
-      <canvas id="canvas" class="border" width="640" height="480"></canvas>
+    <div id="contents">
+      <div id="moodChecker">
+        <h2 class="subtitle">Mood Checker</h2>
+        <div id="chat"></div>
+        <input type="text" id="chat-input"> <button onclick="sendMessage()">Send</button>
+      </div>
+      <div id="highFive">
+        <h2 class="subtitle">Remote High Five</h2>
+        <button onclick="toggleVideo()" id="toggleButton" type="button">
+          Toggle Video
+        </button>
+        <video id="video"></video>
+        <canvas id="canvas" class="border" width="640" height="480"></canvas>
+      </div>
     </div>
+    <div id="bottomMargin"></div>
   </body>
   <!-- Load the handtrackjs model. -->
   <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script>
@@ -76,7 +83,8 @@
 
     function runDetection() {
         model.detect(video).then(predictions => {
-            console.log("Predictions: ", predictions);
+            var reponse = JSON.parse(predictions);
+            console.log("Predictions: ", response[0].bbox[0], " ", response[0].bbox[1]);
             model.renderPredictions(predictions, canvas, context, video);
             if (isVideo) {
                 requestAnimationFrame(runDetection);

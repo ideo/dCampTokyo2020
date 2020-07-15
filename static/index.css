@@ -2,19 +2,32 @@
 General
 **************/
 html,body{
-  font-family: Noto Sans JP;
+  font-family: 'Crimson Pro', serif;
   letter-spacing: 0.1em;
   color: #000000;
-  background-color: #ff8e00ff;
+  background-color: #ffffff;
   max-width: 100%;
+  height:100%;
   overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+#title{
+  margin: 5rem 0 5rem 2rem;
+}
+
+#contents{
+  padding: 5rem;
 }
 
 #moodChecker{
+  text-align: center;
   width: 50%;
+  float:left;
 }
 
 #highFive{
+  text-align: center;
   width:50%;
   float:right;
 }
@@ -24,6 +37,7 @@ html,body{
   padding: 1.5rem 0;
   width: 40%;
   background-color: #ffffff;
+  margin: 2rem 0;
 }
 
 #video{
@@ -32,4 +46,13 @@ html,body{
 
 #canvas{
   background-color: black;
+}
+
+#bottomMargin{
+  position: fixed;
+  left: 0rem;
+  bottom: 0rem;
+  height: 4rem;
+  width: 100%;
+  background-color: #ff8e00ff;
 }
