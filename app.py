@@ -1,4 +1,4 @@
-from flask import Flask, render_template, make_response, redirect
+from flask import Flask, render_template, make_response, redirect, request
 from flask_socketio import SocketIO, send, emit
 
 app = Flask(__name__)
