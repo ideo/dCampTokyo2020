@@ -161,7 +161,7 @@
 
         for(var i=0; i<handPos.length; i++){
           context.beginPath();
-          context.arc(handPos[i][0], handPos[i][1], 10, 0, 2 * Math.PI);
+          context.arc(handPos[i][0], handPos[i][1], 30, 0, 2 * Math.PI);
           context.fillStyle = color[i];
           context.fill();
 
@@ -170,8 +170,7 @@
           let compHandPosCenterX = (obj.content.x + (obj.content.width/2))
           let compHandPosCenterY = (obj.content.y + (obj.content.height/2))
 
-          if(Math.sqrt(Math.pow((myHandPosCenterX - compHandPosCenterX),2) + Math.pow((myHandPosCenterY - compHandPosCenterY),2)) < 10 &&
-          Math.sqrt(Math.pow((myHandPosCenterX - compHandPosCenterX),2) + Math.pow((myHandPosCenterY - compHandPosCenterY),2)) > 5 ){
+          if(Math.sqrt(Math.pow((myHandPosCenterX - compHandPosCenterX),2) + Math.pow((myHandPosCenterY - compHandPosCenterY),2)) < 30) {
             console.log(Math.sqrt(Math.pow((myHandPosCenterX - compHandPosCenterX),2) + Math.pow((myHandPosCenterY - compHandPosCenterY),2)));
             if(soundPlaying == false){
                 sound.play();

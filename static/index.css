@@ -26,6 +26,11 @@ html,body{
   float:left;
 }
 
+#barChart{
+  height: 80%;
+  width: 100%;
+}
+
 #highFive{
   text-align: center;
   width:50%;
