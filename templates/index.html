@@ -13,9 +13,11 @@
     </div>
     <div id="contents">
       <div id="moodChecker">
+        <h2 class="subtitle">Mood Checker</h2>
         <canvas id="barChart"></canvas>
       </div>
       <div id="highFive">
+        <h2 class="subtitle">Remote High Five</h2>
         <canvas id="handPositions" width="640" height="480"></canvas>
       </div>
     </div>
@@ -87,8 +89,8 @@
 
       var obj = JSON.parse(data)
       var index = obj.clients.indexOf(obj.from)
-      handPos[index][0] = obj.content.x
-      handPos[index][1] = obj.content.y
+      handPos[index][0] = obj.content.x + (obj.content.width / 2)
+      handPos[index][1] = obj.content.y + (obj.content.height / 2)
 
       for(var i=0; i<handPos.length; i++){
         handCtx.beginPath();

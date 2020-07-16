@@ -23,7 +23,7 @@
       <div id="highFive">
         <h2 class="subtitle">Remote High Five</h2>
         <video id="video"></video>
-        <canvas id="canvas" class="border" width="640" height="480"></canvas>
+        <canvas id="canvas" class="border"></canvas>
         <button onclick="toggleVideo()" id="toggleButton" type="button">
           Toggle Video
         </button>
@@ -33,6 +33,9 @@
   </body>
   <!-- Load the handtrackjs model. -->
   <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script>
+  <!-- Load the Howler.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.min.js"></script>
+  <!--Socket IO.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
   <script>
     /**************
@@ -81,6 +84,25 @@
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
     var toggleButton = document.getElementById("toggleButton");
+    var myHandPos;
+    var handPos = [
+      [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0],
+      [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]
+    ];
+    var color = ['red', 'blue', 'green', 'yellow', 'orange', 'pink', 'purple', 'grey', 'black', 'brown', 'cyan', 'Lavender']
+    var soundPlaying = false;
+    var sound = new Howl({
+      src: ['highfive.mp3'],
+      volume: 0.8,
+      onplay: function() {
+        console.log('Sound started!');
+        soundPlaying = true;
+      }
+      onend: function() {
+        console.log('Sound Finished!');
+        soundPlaying = false;
+      }
+    });
 
     function toggleVideo() {
         if (!isVideo) {
@@ -104,9 +126,14 @@
     function runDetection() {
         model.detect(video).then(predictions => {
             try{
-              var handPos = {x:predictions[0].bbox[0], y:predictions[0].bbox[1]};
-              console.log("Predictions: ", handPos.x, " ", handPos.y);
-              socket.emit('handPosition', handPos);
+              myHandPos = {
+                x:predictions[0].bbox[0],
+                y:predictions[0].bbox[1],
+                width:predictions[0].bbox[2],
+                height:predictions[0].bbox[3]
+              };
+              console.log("Predictions: ", myHandPos.x, " ", myHandPos.y, " ", myHandPos.width, " ", myHandPos.height);
+              socket.emit('handPosition', myHandPos);
             }
             catch(error) {
               console.error(error);
@@ -125,6 +152,32 @@
         toggleButton.disabled = false
     });
 
+    socket.on("new_handPosition", (data) => {
+      if(isVideo){
+        var obj = JSON.parse(data)
+        var index = obj.clients.indexOf(obj.from)
+        handPos[index][0] = obj.content.x + (obj.content.width / 2)
+        handPos[index][1] = obj.content.y + (obj.content.height / 2)
+
+        for(var i=0; i<handPos.length; i++){
+          context.beginPath();
+          context.arc(handPos[i][0], handPos[i][1], 10, 0, 2 * Math.PI);
+          context.fillStyle = color[i];
+          context.fill();
+
+          let myHandPosCenterX = (myHandPos.x + (myHandPos.width/2))
+          let myHandPosCenterY = (myHandPos.y + (myHandPos.height/2))
+          let compHandPosCenterX = (obj.content.x + (obj.content.width/2))
+          let compHandPosCenterY = (obj.content.y + (obj.content.height/2))
+
+          if(Math.sqrt(Math.pow((myHandPosCenterX - compHandPosCenterX),2) + Math.pow((myHandPosCenterY - compHandPosCenterY),2)) < 5){
+            if(soundPlaying == false){
+                sound.play();
+            }
+          }
+        }
+      }
+    })
 
   </script>
 </html>
