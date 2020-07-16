@@ -93,11 +93,11 @@
     var soundPlaying = false;
     var sound = new Howl({
       src: ['highfive.mp3'],
-      volume: 0.8,
+      volume: 0.5,
       onplay: function() {
         console.log('Sound started!');
         soundPlaying = true;
-      }
+      },
       onend: function() {
         console.log('Sound Finished!');
         soundPlaying = false;
@@ -132,7 +132,7 @@
                 width:predictions[0].bbox[2],
                 height:predictions[0].bbox[3]
               };
-              console.log("Predictions: ", myHandPos.x, " ", myHandPos.y, " ", myHandPos.width, " ", myHandPos.height);
+              //console.log("Predictions: ", myHandPos.x, " ", myHandPos.y, " ", myHandPos.width, " ", myHandPos.height);
               socket.emit('handPosition', myHandPos);
             }
             catch(error) {
@@ -170,7 +170,9 @@
           let compHandPosCenterX = (obj.content.x + (obj.content.width/2))
           let compHandPosCenterY = (obj.content.y + (obj.content.height/2))
 
-          if(Math.sqrt(Math.pow((myHandPosCenterX - compHandPosCenterX),2) + Math.pow((myHandPosCenterY - compHandPosCenterY),2)) < 5){
+          if(Math.sqrt(Math.pow((myHandPosCenterX - compHandPosCenterX),2) + Math.pow((myHandPosCenterY - compHandPosCenterY),2)) < 10 &&
+          Math.sqrt(Math.pow((myHandPosCenterX - compHandPosCenterX),2) + Math.pow((myHandPosCenterY - compHandPosCenterY),2)) > 5 ){
+            console.log(Math.sqrt(Math.pow((myHandPosCenterX - compHandPosCenterX),2) + Math.pow((myHandPosCenterY - compHandPosCenterY),2)));
             if(soundPlaying == false){
                 sound.play();
             }

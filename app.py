@@ -37,7 +37,7 @@ def handleMessage(data):
         "from":request.sid,
         "content":data
     }
-    emit("new_handPosition",json.dumps(message),broadcast=True)
+    emit("new_handPosition",json.dumps(message),broadcast=True, skip_sid=request.sid)
 
 if __name__ == "__main__":
     socketio.run(app, debug=True, host='0.0.0.0', port=5004)
