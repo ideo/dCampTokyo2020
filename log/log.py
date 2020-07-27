@@ -9,6 +9,11 @@ import socketio
 import time
 from datetime import datetime
 import json
+import atexit
+
+def close_file():
+    print("closing log file")
+    logFile.close()
 
 # prepare log file
 currentTime = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -29,8 +34,8 @@ def new_mood(msg):
 
 @sio.event
 def disconnect():
-    print('disconnected from server, closing log file')
-    logFile.close()
+    print('disconnected from server')
 
+atexit.register(close_file)
 sio.connect('https://dcamptokyo2020.herokuapp.com')
 sio.wait()
