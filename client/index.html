@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,700;0,800;1,300;1,400;1,500;1,700;1,800&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,700;0,800;1,300;1,400;1,500;1,700;1,800&display=swap"
+      rel="stylesheet"
+    />
     <!-- CSS -->
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
     <div id="title">
-      <h1>d.camp 2020 Dashboard</h1>
+      <h1>Participant Dashboard</h1>
     </div>
     <div id="contents">
       <div id="moodChecker">
         <h2 class="subtitle">Mood Checker</h2>
         <div class="slidecontainer">
           <p id="emoji">&#128518;</p>
-          <input type="range" min="1" max="100" value="50" id="slider">
+          <input type="range" min="1" max="100" value="50" id="slider" />
           <p id="sliderValue"></p>
         </div>
       </div>
@@ -32,7 +35,7 @@
     <div id="bottomMargin"></div>
   </body>
   <!-- Load the handtrackjs model. -->
-  <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script>
+  <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"></script>
   <!-- Load the Howler.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.min.js"></script>
   <!--Socket IO.js -->
@@ -42,24 +45,32 @@
     Send Socket IO
     **************/
 
-    var socket = io('https://dcamptokyo2020.herokuapp.com/');
-    socket.on('connect', function(){
+    var socket = io("https://dcamptokyo2020.herokuapp.com/"); //change this to your Heroku app URL
+    socket.on("connect", function () {
       console.log("connected to Socket IO!");
     });
 
-    var slider = document.getElementById('slider');
-    var sliderValue = document.getElementById('sliderValue');
-    var emoji = document.getElementById('emoji');
+    var slider = document.getElementById("slider");
+    var sliderValue = document.getElementById("sliderValue");
+    var emoji = document.getElementById("emoji");
 
-    slider.addEventListener('input', function () {
-      sliderValue.innerHTML = slider.value
-      socket.emit('mood',slider.value)
-      if(slider.value < 20) emoji.innerHTML = "&#128565;"
-      else if(slider.value >= 20 && slider.value < 40) emoji.innerHTML = "&#128547;"
-      else if(slider.value >= 40 && slider.value < 60) emoji.innerHTML = "&#128528;"
-      else if(slider.value >= 60 && slider.value < 80) emoji.innerHTML = "&#128513;"
-      else if(slider.value >= 80 && slider.value <= 100) emoji.innerHTML = "&#128514;"
-    }, false);
+    slider.addEventListener(
+      "input",
+      function () {
+        sliderValue.innerHTML = slider.value;
+        socket.emit("mood", slider.value);
+        if (slider.value < 20) emoji.innerHTML = "&#128565;";
+        else if (slider.value >= 20 && slider.value < 40)
+          emoji.innerHTML = "&#128547;";
+        else if (slider.value >= 40 && slider.value < 60)
+          emoji.innerHTML = "&#128528;";
+        else if (slider.value >= 60 && slider.value < 80)
+          emoji.innerHTML = "&#128513;";
+        else if (slider.value >= 80 && slider.value <= 100)
+          emoji.innerHTML = "&#128514;";
+      },
+      false
+    );
 
     // function sendMessage() {
     //     console.log(document.getElementById("chat-input").value)
@@ -75,111 +86,150 @@
     var isVideo = false;
     var model = null;
     const modelParams = {
-        flipHorizontal: true,   // flip e.g for video
-        maxNumBoxes: 1,        // maximum number of boxes to detect
-        iouThreshold: 0.5,      // ioU threshold for non-max suppression
-        scoreThreshold: 0.6,    // confidence threshold for predictions.
-    }
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const context = canvas.getContext('2d');
+      flipHorizontal: true, // flip e.g for video
+      maxNumBoxes: 1, // maximum number of boxes to detect
+      iouThreshold: 0.5, // ioU threshold for non-max suppression
+      scoreThreshold: 0.6, // confidence threshold for predictions.
+    };
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
     var toggleButton = document.getElementById("toggleButton");
     var myHandPos;
     var handPos = [
-      [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0],
-      [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
     ];
-    var color = ['red', 'blue', 'green', 'yellow', 'orange', 'pink', 'purple', 'grey', 'black', 'brown', 'cyan', 'Lavender']
+    var color = [
+      "red",
+      "blue",
+      "green",
+      "yellow",
+      "orange",
+      "pink",
+      "purple",
+      "grey",
+      "black",
+      "brown",
+      "cyan",
+      "Lavender",
+    ];
     var soundPlaying = false;
     var sound = new Howl({
-      src: ['highfive.mp3'],
+      src: ["highfive.mp3"],
       volume: 0.5,
-      onplay: function() {
-        console.log('Sound started!');
+      onplay: function () {
+        console.log("Sound started!");
         soundPlaying = true;
       },
-      onend: function() {
-        console.log('Sound Finished!');
+      onend: function () {
+        console.log("Sound Finished!");
         soundPlaying = false;
-      }
+      },
     });
 
     function toggleVideo() {
-        if (!isVideo) {
-            startVideo();
-            toggleButton.innerHTML = "Video OFF";
-        } else {
-            handTrack.stopVideo(video)
-            isVideo = false;
-            toggleButton.innerHTML = "Video ON";
-        }
+      if (!isVideo) {
+        startVideo();
+        toggleButton.innerHTML = "Video OFF";
+      } else {
+        handTrack.stopVideo(video);
+        isVideo = false;
+        toggleButton.innerHTML = "Video ON";
+      }
     }
 
     function startVideo() {
-        handTrack.startVideo(video).then(function (status) {
-            console.log("video started", status);
-            if (status) {
-                isVideo = true
-                runDetection()
-            }
-        });
+      handTrack.startVideo(video).then(function (status) {
+        console.log("video started", status);
+        if (status) {
+          isVideo = true;
+          runDetection();
+        }
+      });
     }
 
     function runDetection() {
-        model.detect(video).then(predictions => {
-            try{
-              myHandPos = {
-                x:predictions[0].bbox[0],
-                y:predictions[0].bbox[1],
-                width:predictions[0].bbox[2],
-                height:predictions[0].bbox[3]
-              };
-              //console.log("Predictions: ", myHandPos.x, " ", myHandPos.y, " ", myHandPos.width, " ", myHandPos.height);
-              console.log("Hand Center:", myHandPos.x + (myHandPos.width / 2), " ", myHandPos.y + (myHandPos.height / 2));
-              socket.emit('handPosition', myHandPos);
-            }
-            catch(error) {
-              console.error(error);
-            }
-            model.renderPredictions(predictions, canvas, context, video);
-            if (isVideo) {
-                requestAnimationFrame(runDetection);
-            }
-        });
+      model.detect(video).then((predictions) => {
+        try {
+          myHandPos = {
+            x: predictions[0].bbox[0],
+            y: predictions[0].bbox[1],
+            width: predictions[0].bbox[2],
+            height: predictions[0].bbox[3],
+          };
+          //console.log("Predictions: ", myHandPos.x, " ", myHandPos.y, " ", myHandPos.width, " ", myHandPos.height);
+          console.log(
+            "Hand Center:",
+            myHandPos.x + myHandPos.width / 2,
+            " ",
+            myHandPos.y + myHandPos.height / 2
+          );
+          socket.emit("handPosition", myHandPos);
+        } catch (error) {
+          console.error(error);
+        }
+        model.renderPredictions(predictions, canvas, context, video);
+        if (isVideo) {
+          requestAnimationFrame(runDetection);
+        }
+      });
     }
 
     // Load the model.
-    handTrack.load(modelParams).then(lmodel => {
-        // detect objects in the image.
-        model = lmodel
-        toggleButton.disabled = false
+    handTrack.load(modelParams).then((lmodel) => {
+      // detect objects in the image.
+      model = lmodel;
+      toggleButton.disabled = false;
     });
 
     socket.on("new_handPosition", (data) => {
-      if(isVideo){
-        var obj = JSON.parse(data)
-        var index = obj.clients.indexOf(obj.from)
-        handPos[index][0] = obj.content.x + (obj.content.width / 2)
-        handPos[index][1] = obj.content.y + (obj.content.height / 2)
+      if (isVideo) {
+        var obj = JSON.parse(data);
+        var index = obj.clients.indexOf(obj.from);
+        handPos[index][0] = obj.content.x + obj.content.width / 2;
+        handPos[index][1] = obj.content.y + obj.content.height / 2;
 
         context.beginPath();
         // context.arc(handPos[index][0], handPos[index][1], 30, 0, 2 * Math.PI);
         // context.fillStyle = color[index];
         // context.fill();
-        var path = new Path2D('m8.56 24.011c-.276 0-.5-.224-.5-.5v-.87c0-.309-.094-.606-.271-.86l-1.007-1.437c-.587-.84-1.084-1.723-1.477-2.623-.495-1.133-1.563-3.273-3.167-4.878-.055-.055-.096-.122-.121-.195-.022-.065-.201-.654.214-1.23.444-.615 1.373-.928 2.76-.928 1.296 0 2.32.836 3 1.629v-9.13c0-1.103.897-2 2-2 .412 0 .794.125 1.112.339.274-.779 1.017-1.339 1.888-1.339s1.614.56 1.888 1.339c.318-.214.701-.339 1.112-.339 1.103 0 2 .897 2 2v2.269c.294-.171.636-.269 1-.269 1.152 0 2.049.897 2.049 2v7l-.091 1.942c-.101 2.136-.916 4.21-2.296 5.841-.22.26-.342.592-.342.933v.805c0 .276-.224.5-.5.5s-.5-.224-.5-.5v-.805c0-.577.206-1.138.578-1.579 1.239-1.463 1.971-3.324 2.061-5.241l.09-1.919v-6.977c0-.552-.449-1-1-1-.6 0-1.049.448-1.049 1v6c0 .276-.224.5-.5.5s-.5-.224-.5-.5v-10c0-.552-.449-1-1-1s-1 .448-1 1v10c0 .276-.224.5-.5.5s-.5-.224-.5-.5v-11c0-.552-.449-1-1-1s-1 .448-1 1v11c0 .276-.224.5-.5.5s-.5-.224-.5-.5v-10c0-.552-.449-1-1-1s-1 .448-1 1v10.75c0 .231-.16.433-.385.486s-.458-.056-.562-.264c-.013-.024-1.258-2.473-3.053-2.473-1.404 0-1.825.351-1.94.501-.074.096-.091.193-.092.262 1.572 1.616 2.639 3.64 3.262 5.068.367.841.831 1.665 1.38 2.45l1.007 1.437c.295.423.452.919.452 1.434v.87c0 .277-.224.501-.5.501z');
+        var path = new Path2D(
+          "m8.56 24.011c-.276 0-.5-.224-.5-.5v-.87c0-.309-.094-.606-.271-.86l-1.007-1.437c-.587-.84-1.084-1.723-1.477-2.623-.495-1.133-1.563-3.273-3.167-4.878-.055-.055-.096-.122-.121-.195-.022-.065-.201-.654.214-1.23.444-.615 1.373-.928 2.76-.928 1.296 0 2.32.836 3 1.629v-9.13c0-1.103.897-2 2-2 .412 0 .794.125 1.112.339.274-.779 1.017-1.339 1.888-1.339s1.614.56 1.888 1.339c.318-.214.701-.339 1.112-.339 1.103 0 2 .897 2 2v2.269c.294-.171.636-.269 1-.269 1.152 0 2.049.897 2.049 2v7l-.091 1.942c-.101 2.136-.916 4.21-2.296 5.841-.22.26-.342.592-.342.933v.805c0 .276-.224.5-.5.5s-.5-.224-.5-.5v-.805c0-.577.206-1.138.578-1.579 1.239-1.463 1.971-3.324 2.061-5.241l.09-1.919v-6.977c0-.552-.449-1-1-1-.6 0-1.049.448-1.049 1v6c0 .276-.224.5-.5.5s-.5-.224-.5-.5v-10c0-.552-.449-1-1-1s-1 .448-1 1v10c0 .276-.224.5-.5.5s-.5-.224-.5-.5v-11c0-.552-.449-1-1-1s-1 .448-1 1v11c0 .276-.224.5-.5.5s-.5-.224-.5-.5v-10c0-.552-.449-1-1-1s-1 .448-1 1v10.75c0 .231-.16.433-.385.486s-.458-.056-.562-.264c-.013-.024-1.258-2.473-3.053-2.473-1.404 0-1.825.351-1.94.501-.074.096-.091.193-.092.262 1.572 1.616 2.639 3.64 3.262 5.068.367.841.831 1.665 1.38 2.45l1.007 1.437c.295.423.452.919.452 1.434v.87c0 .277-.224.501-.5.501z"
+        );
         context.strokeStyle = color[index];
         context.translate(handPos[index][0], handPos[index][1]);
         context.scale(3, 3);
         context.lineWidth = 0.8;
         context.stroke(path);
 
-        let myHandPosCenterX = (myHandPos.x + (myHandPos.width/2))
-        let myHandPosCenterY = (myHandPos.y + (myHandPos.height/2))
+        let myHandPosCenterX = myHandPos.x + myHandPos.width / 2;
+        let myHandPosCenterY = myHandPos.y + myHandPos.height / 2;
 
-        if(Math.sqrt(Math.pow((myHandPosCenterX - handPos[index][0]),2) + Math.pow((myHandPosCenterY - handPos[index][1]),2)) < 30) {
-          console.log(Math.sqrt(Math.pow((myHandPosCenterX - handPos[index][0]),2) + Math.pow((myHandPosCenterY - handPos[index][1]),2)));
-          if(soundPlaying == false){
-              sound.play();
+        if (
+          Math.sqrt(
+            Math.pow(myHandPosCenterX - handPos[index][0], 2) +
+              Math.pow(myHandPosCenterY - handPos[index][1], 2)
+          ) < 30
+        ) {
+          console.log(
+            Math.sqrt(
+              Math.pow(myHandPosCenterX - handPos[index][0], 2) +
+                Math.pow(myHandPosCenterY - handPos[index][1], 2)
+            )
+          );
+          if (soundPlaying == false) {
+            sound.play();
           }
         }
 
@@ -208,7 +258,6 @@
         //   }
         // }
       }
-    })
-
+    });
   </script>
 </html>

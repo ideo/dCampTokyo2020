@@ -37,5 +37,6 @@ def disconnect():
     print('disconnected from server')
 
 atexit.register(close_file)
+# change this to your Heroku app URL
 sio.connect('https://dcamptokyo2020.herokuapp.com')
 sio.wait()
