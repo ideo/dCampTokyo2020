@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,700;0,800;1,300;1,400;1,500;1,700;1,800&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,700;0,800;1,300;1,400;1,500;1,700;1,800&display=swap"
+      rel="stylesheet"
+    />
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='index.css') }}"
+    />
   </head>
   <body>
     <div id="title">
@@ -23,8 +29,6 @@
     </div>
     <div id="bottomMargin"></div>
   </body>
-  <!-- Load the handtrackjs model. -->
-  <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script>
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <!--Socket IO.js -->
@@ -34,71 +38,97 @@
     Receive Socket IO
     **************/
 
-    var socket = io()
-    var ctx = document.getElementById('barChart').getContext('2d')
+    var socket = io();
+    var ctx = document.getElementById("barChart").getContext("2d");
 
-    var handCanvas = document.getElementById('handPositions')
-    var handCtx = handCanvas.getContext("2d")
+    var handCanvas = document.getElementById("handPositions");
+    var handCtx = handCanvas.getContext("2d");
     var handPos = [
-      [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0],
-      [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
+      [0, 0],
     ];
-    var color = ['red', 'blue', 'green', 'yellow', 'orange', 'pink', 'purple', 'grey', 'black', 'brown', 'cyan', 'Lavender']
+    var color = [
+      "red",
+      "blue",
+      "green",
+      "yellow",
+      "orange",
+      "pink",
+      "purple",
+      "grey",
+      "black",
+      "brown",
+      "cyan",
+      "Lavender",
+    ];
 
     var chart = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'bar',
+      // The type of chart we want to create
+      type: "bar",
 
-        // The data for our dataset
-        data: {
-            labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-            datasets: [{
-                label: 'Mood Checker',
-                backgroundColor: 'rgb(255, 142, 0)',
-                borderColor: 'rgb(255, 142, 0)',
-                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            }]
+      // The data for our dataset
+      data: {
+        labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+        datasets: [
+          {
+            label: "Mood Checker",
+            backgroundColor: "rgb(255, 142, 0)",
+            borderColor: "rgb(255, 142, 0)",
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          },
+        ],
+      },
+
+      // Configuration options go here
+      options: {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                max: 100,
+                min: 0,
+                stepSize: 10,
+              },
+            },
+          ],
         },
-
-        // Configuration options go here
-        options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      max: 100,
-                      min: 0,
-                      stepSize: 10
-                  }
-              }]
-          }
-        }
+      },
     });
 
     socket.on("new_mood", (data) => {
-      var obj = JSON.parse(data)
-      var index = obj.clients.indexOf(obj.from)
-      chart.data.datasets[0].data[index] = obj.content
-      chart.update()
-      console.log(obj)
-    })
+      var obj = JSON.parse(data);
+      var index = obj.clients.indexOf(obj.from);
+      chart.data.datasets[0].data[index] = obj.content;
+      chart.update();
+      console.log(obj);
+    });
 
     socket.on("new_handPosition", (data) => {
       //reset canvas
       handCtx.fillStyle = "white";
       handCtx.fillRect(0, 0, handCanvas.width, handCanvas.height);
 
-      var obj = JSON.parse(data)
-      var index = obj.clients.indexOf(obj.from)
-      handPos[index][0] = obj.content.x + (obj.content.width / 2)
-      handPos[index][1] = obj.content.y + (obj.content.height / 2)
+      var obj = JSON.parse(data);
+      var index = obj.clients.indexOf(obj.from);
+      handPos[index][0] = obj.content.x + obj.content.width / 2;
+      handPos[index][1] = obj.content.y + obj.content.height / 2;
 
-      for(var i=0; i<handPos.length; i++){
+      for (var i = 0; i < handPos.length; i++) {
         handCtx.beginPath();
         handCtx.arc(handPos[i][0], handPos[i][1], 10, 0, 2 * Math.PI);
         handCtx.fillStyle = color[i];
         handCtx.fill();
       }
-    })
-
+    });
   </script>
 </html>

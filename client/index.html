@@ -35,7 +35,7 @@
     <div id="bottomMargin"></div>
   </body>
   <!-- Load the handtrackjs model. -->
-  <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handtrackjs@0.0.13/dist/handtrack.min.js"></script>
   <!-- Load the Howler.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.min.js"></script>
   <!--Socket IO.js -->
@@ -161,23 +161,25 @@
 
     function runDetection() {
       model.detect(video).then((predictions) => {
-        try {
-          myHandPos = {
-            x: predictions[0].bbox[0],
-            y: predictions[0].bbox[1],
-            width: predictions[0].bbox[2],
-            height: predictions[0].bbox[3],
-          };
-          //console.log("Predictions: ", myHandPos.x, " ", myHandPos.y, " ", myHandPos.width, " ", myHandPos.height);
-          console.log(
-            "Hand Center:",
-            myHandPos.x + myHandPos.width / 2,
-            " ",
-            myHandPos.y + myHandPos.height / 2
-          );
-          socket.emit("handPosition", myHandPos);
-        } catch (error) {
-          console.error(error);
+        if (predictions.length > 0) {
+          console.log(predictions);
+          try {
+            myHandPos = {
+              x: predictions[0].bbox[0],
+              y: predictions[0].bbox[1],
+              width: predictions[0].bbox[2],
+              height: predictions[0].bbox[3],
+            };
+            console.log(
+              "Hand Center:",
+              myHandPos.x + myHandPos.width / 2,
+              " ",
+              myHandPos.y + myHandPos.height / 2
+            );
+            socket.emit("handPosition", myHandPos);
+          } catch (error) {
+            console.error(error);
+          }
         }
         model.renderPredictions(predictions, canvas, context, video);
         if (isVideo) {
