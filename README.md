@@ -1,6 +1,6 @@
 # dCampTokyo2020
 
-## Updates
+## IMPORTANT UPDATE
 
 A standalone app version has been released on [https://moodchecker.app/](https://moodchecker.app/).
 
