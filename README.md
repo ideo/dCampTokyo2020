@@ -1,5 +1,13 @@
 # dCampTokyo2020
 
+## Updates
+
+A standalone app version has been released on [https://moodchecker.app/](https://moodchecker.app/).
+
+Repo is open source [here](https://github.com/ideo/mood-checker)
+
+## About
+
 Workshop tools for d.camp Tokyo 2020
 
 ### Mood Checker
